@@ -18,6 +18,7 @@ return [
             ],
             'map' => [
                 'User\\V1' => 'oauth2_pdo',
+                'Ticket2\\V1' => 'oauth2_pdo',
             ],
         ],
     ],

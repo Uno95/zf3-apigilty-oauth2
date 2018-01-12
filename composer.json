@@ -65,7 +65,8 @@
     "autoload": {
         "psr-4": {
             "Application\\": "module/Application/src/",
-            "Aqilix\\": "module/Aqilix/src/"
+            "Aqilix\\": "module/Aqilix/src/",
+            "CompanyNamespace\\": "phplib/"
         }
     },
     "autoload-dev": {
