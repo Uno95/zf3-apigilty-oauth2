@@ -4,13 +4,21 @@ return [
         'factories' => [
             \Ticket2\V1\Rest\ShowTickets\ShowTicketsResource::class => \Ticket2\V1\Rest\ShowTickets\ShowTicketsResourceFactory::class,
         ],
+        'abstract_factories' => [
+            0 => \Ticket2\Mapper\AbstractMapperFactory::class,
+        ],
+    ],
+    'hydrators' => [
+        'factories' => [
+            'Ticket2\\Hydrator\\Ticket' => \Ticket2\V1\Hydrator\TicketHydratorFactory::class,
+        ],
     ],
     'router' => [
         'routes' => [
             'ticket2.rest.show-tickets' => [
                 'type' => 'Segment',
                 'options' => [
-                    'route' => '/api/v1/ticket',
+                    'route' => '/api/v1/ticket[/:uuid]',
                     'defaults' => [
                         'controller' => 'Ticket2\\V1\\Rest\\ShowTickets\\Controller',
                     ],
@@ -27,8 +35,8 @@ return [
         'Ticket2\\V1\\Rest\\ShowTickets\\Controller' => [
             'listener' => \Ticket2\V1\Rest\ShowTickets\ShowTicketsResource::class,
             'route_name' => 'ticket2.rest.show-tickets',
-            'route_identifier_name' => 'show_tickets_id',
-            'collection_name' => 'show_tickets',
+            'route_identifier_name' => 'uuid',
+            'collection_name' => 'ticket',
             'entity_http_methods' => [
                 0 => 'GET',
                 1 => 'POST',
@@ -39,7 +47,7 @@ return [
             'collection_query_whitelist' => [],
             'page_size' => 25,
             'page_size_param' => null,
-            'entity_class' => \Ticket2\V1\Rest\ShowTickets\ShowTicketsEntity::class,
+            'entity_class' => \Ticket2\Entity\Ticket::class,
             'collection_class' => \Ticket2\V1\Rest\ShowTickets\ShowTicketsCollection::class,
             'service_name' => 'Ticket',
         ],
@@ -62,16 +70,16 @@ return [
     ],
     'zf-hal' => [
         'metadata_map' => [
-            \Ticket2\V1\Rest\ShowTickets\ShowTicketsEntity::class => [
-                'entity_identifier_name' => 'id',
+            \Ticket2\Entity\Ticket::class => [
+                'entity_identifier_name' => 'uuid',
                 'route_name' => 'ticket2.rest.show-tickets',
-                'route_identifier_name' => 'show_tickets_id',
-                'hydrator' => \Zend\Hydrator\ArraySerializable::class,
+                'route_identifier_name' => 'uuid',
+                'hydrator' => 'Ticket2\\Hydrator\\Ticket',
             ],
             \Ticket2\V1\Rest\ShowTickets\ShowTicketsCollection::class => [
-                'entity_identifier_name' => 'id',
+                'entity_identifier_name' => 'uuid',
                 'route_name' => 'ticket2.rest.show-tickets',
-                'route_identifier_name' => 'show_tickets_id',
+                'route_identifier_name' => 'uuid',
                 'is_collection' => true,
             ],
         ],

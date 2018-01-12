@@ -66,8 +66,9 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function fetchAll($params = [])
     {
-        \Zend\Debug\Debug::dump(get_class_methods($this->mapper));
-        return $this->mapper->fetchAll();
+        return $this->mapper->getEntityRepository()->findAll();
+        // \Zend\Debug\Debug::dump(get_class_methods($this->mapper));
+        // return $this->mapper->fetchAll();
         // return new ApiProblem(405, 'The GET method has not been defined for collections');
     }
 
