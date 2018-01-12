@@ -3,6 +3,7 @@ vendor/
 config/development.config.php
 data/cache/*
 data/photo/*
+data/log/*
 data/DoctrineORMModule
 !data/cache/.gitkeep
 !data/photo/.gitkeep
