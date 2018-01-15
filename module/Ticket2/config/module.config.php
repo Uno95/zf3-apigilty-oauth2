@@ -2,7 +2,7 @@
 return [
     'service_manager' => [
         'factories' => [
-            'ticket' => \Ticket2\V1\Service\TicketFactory::class,
+            'ticket' => 'Ticket2\\V1\\Service\\TicketFactory',
             \Ticket2\V1\Rest\ShowTickets\ShowTicketsResource::class => \Ticket2\V1\Rest\ShowTickets\ShowTicketsResourceFactory::class,
         ],
         'abstract_factories' => [
@@ -44,6 +44,7 @@ return [
             ],
             'collection_http_methods' => [
                 0 => 'GET',
+                1 => 'POST',
             ],
             'collection_query_whitelist' => [],
             'page_size' => 25,
@@ -102,6 +103,87 @@ return [
                     'PATCH' => false,
                     'DELETE' => false,
                 ],
+            ],
+        ],
+    ],
+    'zf-content-validation' => [
+        'Ticket2\\V1\\Rest\\ShowTickets\\Controller' => [
+            'input_filter' => 'Ticket2\\V1\\Rest\\ShowTickets\\Validator',
+        ],
+    ],
+    'input_filter_specs' => [
+        'Ticket2\\V1\\Rest\\ShowTickets\\Validator' => [
+            0 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [
+                    0 => [
+                        'name' => \Zend\Filter\StringTrim::class,
+                        'options' => [],
+                    ],
+                    1 => [
+                        'name' => \Zend\Filter\StripTags::class,
+                        'options' => [],
+                    ],
+                ],
+                'name' => 'uuid',
+            ],
+            1 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'user_profile_uuid',
+            ],
+            2 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'name',
+            ],
+            3 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'code',
+            ],
+            4 => [
+                'required' => false,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'description',
+            ],
+            5 => [
+                'required' => false,
+                'validators' => [
+                    0 => [
+                        'name' => \Zend\I18n\Validator\DateTime::class,
+                        'options' => [],
+                    ],
+                ],
+                'filters' => [],
+                'name' => 'created_at',
+            ],
+            6 => [
+                'required' => false,
+                'validators' => [
+                    0 => [
+                        'name' => \Zend\I18n\Validator\DateTime::class,
+                        'options' => [],
+                    ],
+                ],
+                'filters' => [],
+                'name' => 'updated_at',
+            ],
+            7 => [
+                'required' => false,
+                'validators' => [
+                    0 => [
+                        'name' => \Zend\I18n\Validator\DateTime::class,
+                        'options' => [],
+                    ],
+                ],
+                'filters' => [],
+                'name' => 'deleted_at',
             ],
         ],
     ],

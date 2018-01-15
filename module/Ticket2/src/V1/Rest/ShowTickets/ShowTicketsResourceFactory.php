@@ -7,7 +7,8 @@ class ShowTicketsResourceFactory
     {
         // $mapper = $services->get('ticket.showTickets');
         $mapper = $services->get('Ticket2\Mapper\Ticket');
-        return new ShowTicketsResource($mapper);
+        $service = $services->get('ticket');
+        return new ShowTicketsResource($mapper, $service);
         // return new ShowTicketsResource($services->get(Mapper::class));
     }
 }

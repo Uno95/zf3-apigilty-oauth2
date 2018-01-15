@@ -2,10 +2,13 @@
 
 namespace Ticket2\Entity;
 
+use Aqilix\ORM\Entity\EntityInterface;
+use Aqilix\OAuth2\Entity\OauthUsers;
+
 /**
  * Ticket
  */
-class Ticket
+class Ticket implements EntityInterface
 {
     /**
      * @var string

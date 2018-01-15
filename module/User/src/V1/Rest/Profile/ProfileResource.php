@@ -60,6 +60,7 @@ class ProfileResource extends AbstractResourceListener
      */
     public function fetch($id)
     {
+        // \Zend\Debug\Debug::dump($deb);
         $userProfile = $this->getUserProfileMapper()->fetchOneBy(['uuid' => $id]);
         if (is_null($userProfile)) {
             return new ApiProblemResponse(new ApiProblem(404, "User Profile not found"));
