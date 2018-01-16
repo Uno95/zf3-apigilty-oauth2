@@ -25,5 +25,4 @@ class Ticket extends AbstractMapper implements MapperInterface
     {
         return $this->getEntityManager()->getRepository('Ticket2\\Entity\\Ticket');
     }
-
 }

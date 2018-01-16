@@ -27,8 +27,6 @@ class ShowTicketsResource extends AbstractResourceListener
     public function create($data)
     {
         $data = (array) $data;
-        // return $this->mapper->getEntityRepository()->create($data);
-        // return $this->getTicketMapper()->getEntityRepository()->create($data);
         return $this->getTicketService()->save($data);
         // return new ApiProblem(405, 'sThe POST method has not been defined');
     }
@@ -41,21 +39,7 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function delete($id)
     {
-        // $ticket = $this->getTicketMapper()->fetchOneBy(['uuid' => $id]);
-        // echo get_class($ticket);
-        // exit;
-
-        // $ticket = $this->getTicketMapper()->getEntityRepository()->findBy(['uuid' => $id]);
-        // print_r($ticket);
-        // exit;
-        // $ticket = (array) $ticket;
         return $this->getTicketService()->delete($id);
-        
-        // $this->getTicketMapper()->delete($ticket);
-        // return $ticket;
-        // var_dump();
-
-        // return $this->getTicketService()->save($data);
         // return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
     }
 
@@ -90,7 +74,7 @@ class ShowTicketsResource extends AbstractResourceListener
     public function fetchAll($params = [])
     {
         $t = $this->getTicketMapper()->getEntityRepository()->findAll();
-        return $t;   
+        return $t;
         // return new ApiProblem(405, 'The GET method has not been defined for collections');
     }
 
@@ -137,7 +121,9 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function update($id, $data)
     {
-        return new ApiProblem(405, 'The PUT method has not been defined for individual resources');
+        $data = (array) $data;
+        return $this->getTicketService()->update($id, $data);
+        // return new ApiProblem(405, 'The PUT method has not been defined for individual resources');
     }
 
     public function getTicketMapper()

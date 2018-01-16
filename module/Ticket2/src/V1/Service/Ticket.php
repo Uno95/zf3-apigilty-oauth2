@@ -49,95 +49,17 @@ class Ticket
         $this->getTicketMapper()->save($ticket);
     }
 
-    public function delete($id)
+    public function update($id, $data)
     {
-        $ticket = $this->getTicketMapper()->fetchOneBy(['uuid' => $id]);
-        $this->getTicketMapper()->delete($ticket);
+        $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
+        $ticket     = $this->getTicketHydrator()->hydrate($data, $ticketObj);
+        $this->getTicketMapper()->save($ticket);
     }
 
-    // /**
-    //  * Retrieve customer by account
-    //  *
-    //  * @param  \User\Entity\Customer $ticket
-    //  * @return array
-    //  */
-    // public function fetchByAccount(\User\Entity\Account $account)
-    // {
-    //     return $this->getFakeGpsLogMapper()
-    //                 ->getEntityRepository()
-    //                 ->findBy(['account' => $account], ['createdAt' => 'DESC']);
-    // }
-
-    // /**
-    //  * Create FakeGpsLog
-    //  *
-    //  * @param array $ticketData
-    //  * @param \Zend\InputFilter\InputFilter $inputFilter
-    //  */
-    // public function create(array $data, ZendInputFilter $inputFilter)
-    // {
-    //     if (isset($data['userProfile'])) {
-    //         $inputFilter->add(['name'  => 'userProfile']);
-    //         $inputFilter->get('userProfile')->setValue($data['userProfile']);
-    //     }
-    // /**
-    //  * Create FakeGpsLog
-    //  *
-    //  * @param array $ticketData
-    //  * @param \Zend\InputFilter\InputFilter $inputFilter
-    //  */
-    // public function create(array $data, ZendInputFilter $inputFilter)
-    // {
-    //     if (isset($data['userProfile'])) {
-    //         $inputFilter->add(['name'  => 'userProfile']);
-    //         $inputFilter->get('userProfile')->setValue($data['userProfile']);
-    //     }
-
-    //     if (isset($data['ticket'])) {
-    //         $inputFilter->add(['name'  => 'ticket']);
-    //         $inputFilter->get('ticket')->setValue($data['ticket']);
-    //     }
-
-    //     if (isset($data['account'])) {
-    //         $inputFilter->add(['name'  => 'account']);
-    //         $inputFilter->get('account')->setValue($data['account']);
-    //     }
-
-    //     $fakeGpsLogEvent = $this->getFakeGpsLogEvent();
-    //     $fakeGpsLogEvent->setInputFilter($inputFilter);
-    //     $fakeGpsLogEvent->setName(FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG);
-    //     $create = $this->getEventManager()->triggerEvent($fakeGpsLogEvent);
-    //     if ($create->stopped()) {
-    //         $fakeGpsLogEvent->setName(FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG_ERROR);
-    //         $fakeGpsLogEvent->setException($create->last());
-    //         // trigger FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG_ERROR
-    //         $this->getEventManager()->triggerEvent($fakeGpsLogEvent);
-
-    //     if (isset($data['ticket'])) {
-    //         $inputFilter->add(['name'  => 'ticket']);
-    //         $inputFilter->get('ticket')->setValue($data['ticket']);
-    //     }
-
-    //     if (isset($data['account'])) {
-    //         $inputFilter->add(['name'  => 'account']);
-    //         $inputFilter->get('account')->setValue($data['account']);
-    //     }
-
-    //     $fakeGpsLogEvent = $this->getFakeGpsLogEvent();
-    //     $fakeGpsLogEvent->setInputFilter($inputFilter);
-    //     $fakeGpsLogEvent->setName(FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG);
-    //     $create = $this->getEventManager()->triggerEvent($fakeGpsLogEvent);
-    //     if ($create->stopped()) {
-    //         $fakeGpsLogEvent->setName(FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG_ERROR);
-    //         $fakeGpsLogEvent->setException($create->last());
-    //         // trigger FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG_ERROR
-    //         $this->getEventManager()->triggerEvent($fakeGpsLogEvent);
-    //         throw $fakeGpsLogEvent->getException();
-    //     } else {
-    //         // trigger FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG_SUCCESS
-    //         $fakeGpsLogEvent->setName(FakeGpsLogEvent::EVENT_CREATE_FAKE_GPS_LOG_SUCCESS);
-    //         $this->getEventManager()->triggerEvent($fakeGpsLogEvent);
-    //         return $fakeGpsLogEvent->getFakeGpsLogEntity();
-    //     }
-    // }
+    public function delete($id)
+    {
+        $ticket = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
+        $this->getTicketMapper()->delete($ticket);
+        return true;
+    }
 }
