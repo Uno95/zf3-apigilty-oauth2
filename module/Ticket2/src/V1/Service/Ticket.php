@@ -46,7 +46,11 @@ class Ticket
     public function save(array $data)
     {
         $ticket = $this->getTicketHydrator()->hydrate($data, new \Ticket2\Entity\Ticket);
-        $this->getTicketMapper()->save($ticket);
+        $result = $this->getTicketMapper()->save($ticket);
+        if(!$result)
+            $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Cannot create new data!", ["function" => __FUNCTION__]);
+        else    
+            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data created successfully!", ["function" => __FUNCTION__]);
     }
 
     public function update($id, $data)
@@ -54,12 +58,14 @@ class Ticket
         $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
         $ticket     = $this->getTicketHydrator()->hydrate($data, $ticketObj);
         $this->getTicketMapper()->save($ticket);
+        $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data updated successfully!", ["function" => __FUNCTION__]);
     }
 
     public function delete($id)
     {
         $ticket = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
         $this->getTicketMapper()->delete($ticket);
+        $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data deleted successfully!", ["function" => __FUNCTION__]);
         return true;
     }
 }
