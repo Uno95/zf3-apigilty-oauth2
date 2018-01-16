@@ -12,9 +12,9 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteable as SoftDeleteableTrait;
  */
 class Ticket implements EntityInterface
 {
-    use TimestampableTrait;
+    // use TimestampableTrait;
 
-    use SoftDeleteableTrait;
+    // use SoftDeleteableTrait;
 
     /**
      * @var string
