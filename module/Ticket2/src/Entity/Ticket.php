@@ -4,12 +4,18 @@ namespace Ticket2\Entity;
 
 use Aqilix\ORM\Entity\EntityInterface;
 use Aqilix\OAuth2\Entity\OauthUsers;
+use Gedmo\Timestampable\Traits\Timestampable as TimestampableTrait;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteable as SoftDeleteableTrait;
 
 /**
  * Ticket
  */
 class Ticket implements EntityInterface
 {
+    use TimestampableTrait;
+
+    use SoftDeleteableTrait;
+
     /**
      * @var string
      */

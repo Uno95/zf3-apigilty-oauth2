@@ -2,7 +2,7 @@
 return [
     'service_manager' => [
         'factories' => [
-            'ticket' => 'Ticket2\\V1\\Service\\TicketFactory',
+            'ticket' => \Ticket2\V1\Service\TicketFactory::class,
             \Ticket2\V1\Rest\ShowTickets\ShowTicketsResource::class => \Ticket2\V1\Rest\ShowTickets\ShowTicketsResourceFactory::class,
         ],
         'abstract_factories' => [
@@ -116,43 +116,28 @@ return [
             0 => [
                 'required' => true,
                 'validators' => [],
-                'filters' => [
-                    0 => [
-                        'name' => \Zend\Filter\StringTrim::class,
-                        'options' => [],
-                    ],
-                    1 => [
-                        'name' => \Zend\Filter\StripTags::class,
-                        'options' => [],
-                    ],
-                ],
-                'name' => 'uuid',
+                'filters' => [],
+                'name' => 'user_profile_uuid',
             ],
             1 => [
                 'required' => true,
                 'validators' => [],
                 'filters' => [],
-                'name' => 'user_profile_uuid',
+                'name' => 'name',
             ],
             2 => [
                 'required' => true,
                 'validators' => [],
                 'filters' => [],
-                'name' => 'name',
-            ],
-            3 => [
-                'required' => true,
-                'validators' => [],
-                'filters' => [],
                 'name' => 'code',
             ],
-            4 => [
+            3 => [
                 'required' => false,
                 'validators' => [],
                 'filters' => [],
                 'name' => 'description',
             ],
-            5 => [
+            4 => [
                 'required' => false,
                 'validators' => [
                     0 => [
@@ -163,7 +148,7 @@ return [
                 'filters' => [],
                 'name' => 'created_at',
             ],
-            6 => [
+            5 => [
                 'required' => false,
                 'validators' => [
                     0 => [
@@ -174,7 +159,7 @@ return [
                 'filters' => [],
                 'name' => 'updated_at',
             ],
-            7 => [
+            6 => [
                 'required' => false,
                 'validators' => [
                     0 => [
