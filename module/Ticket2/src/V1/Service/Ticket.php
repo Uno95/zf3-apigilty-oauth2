@@ -49,6 +49,12 @@ class Ticket
         $this->getTicketMapper()->save($ticket);
     }
 
+    public function delete($id)
+    {
+        $ticket = $this->getTicketMapper()->fetchOneBy(['uuid' => $id]);
+        $this->getTicketMapper()->delete($ticket);
+    }
+
     // /**
     //  * Retrieve customer by account
     //  *

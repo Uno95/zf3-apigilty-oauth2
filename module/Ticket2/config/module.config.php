@@ -41,10 +41,14 @@ return [
             'entity_http_methods' => [
                 0 => 'GET',
                 1 => 'POST',
+                2 => 'PUT',
+                3 => 'DELETE',
             ],
             'collection_http_methods' => [
                 0 => 'GET',
                 1 => 'POST',
+                2 => 'PUT',
+                3 => 'DELETE',
             ],
             'collection_query_whitelist' => [],
             'page_size' => 25,
@@ -99,9 +103,9 @@ return [
                 'entity' => [
                     'GET' => true,
                     'POST' => true,
-                    'PUT' => false,
+                    'PUT' => true,
                     'PATCH' => false,
-                    'DELETE' => false,
+                    'DELETE' => true,
                 ],
             ],
         ],

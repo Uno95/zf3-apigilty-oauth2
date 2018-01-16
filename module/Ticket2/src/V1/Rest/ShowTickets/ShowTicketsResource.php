@@ -41,7 +41,22 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function delete($id)
     {
-        return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
+        // $ticket = $this->getTicketMapper()->fetchOneBy(['uuid' => $id]);
+        // echo get_class($ticket);
+        // exit;
+
+        // $ticket = $this->getTicketMapper()->getEntityRepository()->findBy(['uuid' => $id]);
+        // print_r($ticket);
+        // exit;
+        // $ticket = (array) $ticket;
+        return $this->getTicketService()->delete($id);
+        
+        // $this->getTicketMapper()->delete($ticket);
+        // return $ticket;
+        // var_dump();
+
+        // return $this->getTicketService()->save($data);
+        // return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
     }
 
     /**
@@ -74,9 +89,8 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function fetchAll($params = [])
     {
-        // return $this->getTicketMapper();
-        // \Zend\Debug\Debug::dump(get_class_methods($this->getTicketMapper()));
-        return $this->getTicketMapper()->getEntityRepository()->findAll();
+        $t = $this->getTicketMapper()->getEntityRepository()->findAll();
+        return $t;   
         // return new ApiProblem(405, 'The GET method has not been defined for collections');
     }
 
