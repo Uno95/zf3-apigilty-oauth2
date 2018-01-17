@@ -62,7 +62,7 @@ class Ticket implements EntityInterface
     private $uuid;
 
     /**
-     * Get userProfileUuid
+     * Get userProfile
      *
      * @return string
      */
@@ -74,7 +74,7 @@ class Ticket implements EntityInterface
     /**
      * Set userProfileUuid
      *
-     * @param string $userProfileUuid
+     * @param string $userProfile
      *
      * @return Ticket
      */

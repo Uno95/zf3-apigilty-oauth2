@@ -11,7 +11,8 @@ class TicketFactory implements FactoryInterface
     {
         $ticketMapper = $container->get('Ticket2\Mapper\Ticket');
         $ticketHydrator = $container->get('HydratorManager')->get('Ticket2\\Hydrator\\Ticket');
-        $ticket = new Ticket($ticketMapper, $ticketHydrator);
+        $userProfileMapper = $container->get('User\Mapper\UserPRofile');
+        $ticket = new Ticket($ticketMapper, $userProfileMapper, $ticketHydrator);
         $ticket->setLogger($container->get("logger_default"));
         return $ticket;
     }

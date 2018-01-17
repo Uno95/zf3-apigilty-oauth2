@@ -6,17 +6,20 @@ use Zend\EventManager\EventManagerAwareTrait;
 use Zend\InputFilter\InputFilter as ZendInputFilter;
 use Psr\Log\LoggerAwareTrait;
 use Ticket2\Mapper\Ticket as TicketMapper;
+use User\Mapper\UserProfile as UserProfileMapper;
 
 class Ticket
 {
     use LoggerAwareTrait;
 
     protected $ticketMapper;
+    protected $userProfileMapper;
     protected $ticketHydrator;
 
-    public function __construct(TicketMapper $ticketMapper, DoctrineObject $ticketHydrator)
+    public function __construct(TicketMapper $ticketMapper, UserProfileMapper $userProfileMapper, DoctrineObject $ticketHydrator)
     {
         $this->setTicketMapper($ticketMapper);
+        $this->setUserProfileMapper($userProfileMapper);
         $this->setTicketHydrator($ticketHydrator);
     }
 
@@ -25,17 +28,25 @@ class Ticket
         return $this->ticketMapper;
     }
 
-    /**
-     * @param UserProfileMapper $userProfileMapper
-     */
     public function setTicketMapper(TicketMapper $ticketMapper)
     {
         $this->ticketMapper = $ticketMapper;
     }
 
+
+    public function setUserProfileMapper(UserProfileMapper $userProfileMapper)
+    {
+        $this->userProfileMapper = $userProfileMapper;
+    }
+
     public function getTicketHydrator()
     {
         return $this->ticketHydrator;
+    }
+
+    public function getUserProfileMapper()
+    {
+        return $this->userProfileMapper;
     }
 
     public function setTicketHydrator(DoctrineObject $ticketHydrator)
@@ -46,7 +57,12 @@ class Ticket
     public function save(array $data)
     {
         try {
+            $userProfileUuid    = $data['user_profile_uuid'];
+            $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
+            // var_dump($userProfileUuid);
+            // exit;
             $ticket = $this->getTicketHydrator()->hydrate($data, new \Ticket2\Entity\Ticket);
+            $ticket->setUserProfile($userProfileObj);
             $result = $this->getTicketMapper()->save($ticket);
             $UUID   = $result->getUuid();
 

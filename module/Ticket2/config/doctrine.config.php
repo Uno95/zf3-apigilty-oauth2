@@ -9,6 +9,7 @@ return [
             ],
             'orm_default' => [
                 'drivers' => [
+                    'User\Entity' => 'user_entity',
                     'Ticket2\Entity' => 'ticket_entity',
 
                 ]
