@@ -12,6 +12,13 @@ return [
                     'Ticket2\Entity' => 'ticket_entity',
 
                 ]
+            ],
+            'configuration' => [
+                'orm_default' => [
+                    'filters' => [
+                        'soft-deleteable' => 'Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter'
+                    ]
+                ]
             ]
         ]
     ]

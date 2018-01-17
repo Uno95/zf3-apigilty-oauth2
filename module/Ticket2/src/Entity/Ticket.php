@@ -3,9 +3,9 @@
 namespace Ticket2\Entity;
 
 use Aqilix\ORM\Entity\EntityInterface;
-use Aqilix\OAuth2\Entity\OauthUsers;
 use Gedmo\Timestampable\Traits\Timestampable as TimestampableTrait;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteable as SoftDeleteableTrait;
+use User\Entity\UserProfile;
 
 /**
  * Ticket
@@ -19,7 +19,7 @@ class Ticket implements EntityInterface
     /**
      * @var string
      */
-    private $userProfileUuid;
+    private $userProfile;
 
     /**
      * @var string
@@ -61,6 +61,15 @@ class Ticket implements EntityInterface
      */
     private $uuid;
 
+    /**
+     * Get userProfileUuid
+     *
+     * @return string
+     */
+    public function getuserProfile()
+    {
+        return $this->userProfile;
+    }
 
     /**
      * Set userProfileUuid
@@ -69,21 +78,9 @@ class Ticket implements EntityInterface
      *
      * @return Ticket
      */
-    public function setUserProfileUuid($userProfileUuid)
+    public function setuserProfile(UserProfile $userProfile)
     {
-        $this->userProfileUuid = $userProfileUuid;
-
-        return $this;
-    }
-
-    /**
-     * Get userProfileUuid
-     *
-     * @return string
-     */
-    public function getUserProfileUuid()
-    {
-        return $this->userProfileUuid;
+        $this->userProfile = $userProfile;
     }
 
     /**

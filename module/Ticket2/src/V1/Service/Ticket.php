@@ -45,41 +45,39 @@ class Ticket
 
     public function save(array $data)
     {
-        try{
+        try {
             $ticket = $this->getTicketHydrator()->hydrate($data, new \Ticket2\Entity\Ticket);
             $result = $this->getTicketMapper()->save($ticket);
             $UUID   = $result->getUuid();
 
             $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data created successfully! \nUUID: ".$UUID, ["function" => __FUNCTION__]);
-    
-            // \Zend\Debug\Debug::dump(get_class_methods($result));exit;
 
-        }catch(\Exception $e){
+            // \Zend\Debug\Debug::dump(get_class_methods($result));exit;
+        } catch (\Exception $e) {
             $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
         }
-
     }
 
     public function update($id, $data)
     {
-        try{
+        try {
             $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
             $ticket     = $this->getTicketHydrator()->hydrate($data, $ticketObj);
             $result     = $this->getTicketMapper()->save($ticket);
             $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data updated successfully! \nUUID: ".$UUID, ["function" => __FUNCTION__]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
         }
     }
 
     public function delete($id)
     {
-        try{
+        try {
             $ticket = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
             $this->getTicketMapper()->delete($ticket);
             $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data deleted successfully!", ["function" => __FUNCTION__]);
             return true;
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
         }
     }
