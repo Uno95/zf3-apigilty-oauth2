@@ -10,13 +10,14 @@ class UserProfileStrategy implements StrategyInterface
     public function extract($value, $object = null)
     {
         if ($value instanceof UserProfile) {
-            \Zend\Debug\Debug::dump($value);
-            exit;
+            // \Zend\Debug\Debug::dump($value);
+            // exit;
             // var_dump($value);exit;
+            return $value->getFirstName();
             return $value->getFirstName();
         }
 
-        return $value->getFirstName();
+        return null;
     }
 
     public function hydrate($value, array $data = null)

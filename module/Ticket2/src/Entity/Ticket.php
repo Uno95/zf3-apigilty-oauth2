@@ -66,7 +66,7 @@ class Ticket implements EntityInterface
      *
      * @return string
      */
-    public function getuserProfile()
+    public function getUserProfile()
     {
         return $this->userProfile;
     }
@@ -78,7 +78,7 @@ class Ticket implements EntityInterface
      *
      * @return Ticket
      */
-    public function setuserProfile(UserProfile $userProfile)
+    public function setUserProfile(UserProfile $userProfile)
     {
         $this->userProfile = $userProfile;
     }
