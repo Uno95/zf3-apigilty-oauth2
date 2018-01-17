@@ -9,7 +9,7 @@
       <generator strategy="UUID"/>
     </id>
     <field name="name" type="text" column="name" length="65535" nullable="true">
-      <options>
+        <options>
         <option name="fixed"/>
       </options>
     </field>
@@ -34,9 +34,9 @@
     <field name="updatedAt" type="datetime" column="updated_at" nullable="true">
       <gedmo:timestampable on="update"/>
     </field>
-    <field name="deletedAt" type="datetime" column="deleted_at" nullable="true">
-      <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" />
-    </field>
+    <field name="deletedAt" type="datetime" column="deleted_at" nullable="true"/>
+
+    <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" />
     <many-to-one field="userProfile" target-entity="User\Entity\UserProfile">
       <join-columns>
         <join-column name="user_profile_uuid" referenced-column-name="uuid"/>
