@@ -60,9 +60,10 @@ class Ticket
         try {
             $userProfileUuid    = $data['user_profile_uuid'];
             $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
-            if($userProfileObj == '')
+            if ($userProfileObj == '') {
                 return new ApiProblem(500, 'Cannot find uuid refrence');
-                
+            }
+
             $ticket = $this->getTicketHydrator()->hydrate($data, new \Ticket2\Entity\Ticket);
             $ticket->setUserProfile($userProfileObj);
             $result = $this->getTicketMapper()->save($ticket);
@@ -81,8 +82,9 @@ class Ticket
         try {
             $userProfileUuid    = $data['user_profile_uuid'];
             $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
-            if($userProfileObj == '')
+            if ($userProfileObj == '') {
                 return new ApiProblem(500, 'Cannot find uuid refrence');
+            }
 
             $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
             $ticket     = $this->getTicketHydrator()->hydrate($data, $ticketObj);

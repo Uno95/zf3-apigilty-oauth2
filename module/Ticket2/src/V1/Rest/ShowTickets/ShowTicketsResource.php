@@ -77,7 +77,7 @@ class ShowTicketsResource extends AbstractResourceListener
     {
 
         $queryParams   = $params->toArray();
-        $paginatorAdapter = $this->getTicketMapper()->buildListPaginatorAdapter($queryParams);   
+        $paginatorAdapter = $this->getTicketMapper()->buildListPaginatorAdapter($queryParams);
         return new \Zend\Paginator\Paginator($paginatorAdapter);
 
         // return new ApiProblem(405, 'The GET method has not been defined for collections');

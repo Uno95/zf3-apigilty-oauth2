@@ -61,7 +61,7 @@ abstract class AbstractMapper implements MapperInterface
         // exit;
         $qb = $this->getEntityRepository()->createQueryBuilder('t');
         $sort = ($asc === false) ? 'DESC' : 'ASC';
-        
+
 
         // filter by status
         if (isset($params['status'])) {
@@ -75,12 +75,11 @@ abstract class AbstractMapper implements MapperInterface
         } else {
             $qb->orderBy('t.createdAt', $sort);
         }
- 
+
         $query = $qb->getQuery();
         //echo $query->getSql();
         //exit;
         return $query;
-        
     }
 
     /**

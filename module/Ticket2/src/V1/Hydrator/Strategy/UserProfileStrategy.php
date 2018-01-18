@@ -10,7 +10,6 @@ class UserProfileStrategy implements StrategyInterface
     public function extract($value, $object = null)
     {
         if ($value instanceof UserProfile) {
-            
             return $value->getFirstName();
         }
 

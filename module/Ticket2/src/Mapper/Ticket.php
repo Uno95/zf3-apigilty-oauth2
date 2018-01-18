@@ -25,7 +25,7 @@ class Ticket extends AbstractMapper implements MapperInterface
     {
         return $this->getEntityManager()->getRepository('Ticket2\\Entity\\Ticket');
     }
-    
+
     public function fetchAll(array $params, $order = null, $asc = false)
     {
 
@@ -42,9 +42,8 @@ class Ticket extends AbstractMapper implements MapperInterface
         } else {
             $qb->orderBy('t.createdAt', $sort);
         }
- 
+
         $query = $qb->getQuery();
         return $query;
-        
     }
 }
