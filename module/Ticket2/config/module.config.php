@@ -49,7 +49,9 @@ return [
                 1 => 'POST',
                 2 => 'PUT',
             ],
-            'collection_query_whitelist' => [],
+            'collection_query_whitelist' => [
+                0 => 'status',
+            ],
             'page_size' => '10',
             'page_size_param' => null,
             'entity_class' => \Ticket2\Entity\Ticket::class,
@@ -172,6 +174,12 @@ return [
                 ],
                 'filters' => [],
                 'name' => 'deleted_at',
+            ],
+            7 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'status',
             ],
         ],
     ],

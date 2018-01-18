@@ -56,17 +56,23 @@ abstract class AbstractMapper implements MapperInterface
      */
     public function fetchAll(array $params, $order = null, $asc = false)
     {
+
         $qb = $this->getEntityRepository()->createQueryBuilder('t');
         $sort = ($asc === false) ? 'DESC' : 'ASC';
-         if (is_null($order)) {
-             $qb->orderBy('t.createdAt', $sort);
-         } else {
-             $qb->orderBy('t.' . $order, $sort);
-         }
+
+        // filter by status
+        if (isset($params['status'])) {
+            $qb->andWhere('t.status = :status')
+               ->setParameter('status', $params['status']);
+        }
+        if (is_null($order)) {
+            $qb->orderBy('t.createdAt', $sort);
+        } else {
+            $qb->orderBy('t.'.$order, $sort);
+        }
  
-         $query = $qb->getQuery();
-        //  $query = (array) $query;
-         return $query;
+        $query = $qb->getQuery();
+        return $query;
         
     }
 

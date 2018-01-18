@@ -78,7 +78,8 @@ class ShowTicketsResource extends AbstractResourceListener
         // $t = $this->getTicketMapper()->getEntityRepository()->findAll();
         // return $t;
 
-        $qb = $this->getTicketMapper()->fetchAll([], [], $asc);
+        $queryParams   = $params->toArray();
+        $qb = $this->getTicketMapper()->fetchAll($queryParams, null, $asc);
         $qb = (array) $qb;
         $paginatorAdapter = $this->getTicketMapper()->buildListPaginatorAdapter($qb);
         return new \Zend\Paginator\Paginator($paginatorAdapter);
