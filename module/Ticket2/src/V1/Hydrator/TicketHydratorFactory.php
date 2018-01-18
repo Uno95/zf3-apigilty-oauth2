@@ -26,7 +26,7 @@ class TicketHydratorFactory implements FactoryInterface
         $hydrator->addStrategy('userProfile', new \Ticket2\V1\Hydrator\Strategy\UserProfileStrategy);
         $hydrator->addStrategy('createdAt', new DateTimeFormatterStrategy('c'));
         $hydrator->addFilter('exclude', function ($property) {
-            if (in_array($property, ['deletedAt'])) {
+            if (in_array($property, ['updatedAt', 'deleteAt'])) {
                 return false;
             }
 

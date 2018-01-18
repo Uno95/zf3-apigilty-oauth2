@@ -62,7 +62,9 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function fetch($id)
     {
-        return new ApiProblem(405, 'The GET method has not been defined for individual resources');
+        $data = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
+        return $data;
+        // return new ApiProblem(405, 'The GET method has not been defined for individual resources');
     }
 
     /**

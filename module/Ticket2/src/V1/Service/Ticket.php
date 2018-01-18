@@ -98,7 +98,7 @@ class Ticket
     {
         try {
             $ticket = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
-            $this->getTicketMapper()->remove($ticket);
+            $this->getTicketMapper()->delete($ticket);
             $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data deleted successfully!", ["function" => __FUNCTION__]);
             return true;
         } catch (\Exception $e) {
