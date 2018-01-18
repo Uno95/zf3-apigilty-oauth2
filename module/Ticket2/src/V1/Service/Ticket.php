@@ -1,8 +1,9 @@
 <?php
 namespace Ticket2\V1\Service;
 
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use ZF\ApiProblem\ApiProblem;
 use Zend\EventManager\EventManagerAwareTrait;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use Zend\InputFilter\InputFilter as ZendInputFilter;
 use Psr\Log\LoggerAwareTrait;
 use Ticket2\Mapper\Ticket as TicketMapper;
@@ -59,8 +60,9 @@ class Ticket
         try {
             $userProfileUuid    = $data['user_profile_uuid'];
             $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
-            // var_dump($userProfileUuid);
-            // exit;
+            if($userProfileObj == '')
+                return new ApiProblem(500, 'Cannot find uuid refrence');
+                
             $ticket = $this->getTicketHydrator()->hydrate($data, new \Ticket2\Entity\Ticket);
             $ticket->setUserProfile($userProfileObj);
             $result = $this->getTicketMapper()->save($ticket);
@@ -77,8 +79,14 @@ class Ticket
     public function update($id, $data)
     {
         try {
+            $userProfileUuid    = $data['user_profile_uuid'];
+            $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
+            if($userProfileObj == '')
+                return new ApiProblem(500, 'Cannot find uuid refrence');
+
             $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
             $ticket     = $this->getTicketHydrator()->hydrate($data, $ticketObj);
+            $ticket->setUserProfile($userProfileObj);
             $result     = $this->getTicketMapper()->save($ticket);
             $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data updated successfully! \nUUID: ".$UUID, ["function" => __FUNCTION__]);
         } catch (\Exception $e) {
