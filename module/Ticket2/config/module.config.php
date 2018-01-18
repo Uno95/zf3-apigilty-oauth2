@@ -50,7 +50,7 @@ return [
                 2 => 'PUT',
             ],
             'collection_query_whitelist' => [],
-            'page_size' => 25,
+            'page_size' => '10',
             'page_size_param' => null,
             'entity_class' => \Ticket2\Entity\Ticket::class,
             'collection_class' => \Ticket2\V1\Rest\ShowTickets\ShowTicketsCollection::class,

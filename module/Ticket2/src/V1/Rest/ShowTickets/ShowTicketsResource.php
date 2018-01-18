@@ -75,8 +75,14 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function fetchAll($params = [])
     {
-        $t = $this->getTicketMapper()->getEntityRepository()->findAll();
-        return $t;
+        // $t = $this->getTicketMapper()->getEntityRepository()->findAll();
+        // return $t;
+
+        $qb = $this->getTicketMapper()->fetchAll([], [], $asc);
+        $qb = (array) $qb;
+        $paginatorAdapter = $this->getTicketMapper()->buildListPaginatorAdapter($qb);
+        return new \Zend\Paginator\Paginator($paginatorAdapter);
+
         // return new ApiProblem(405, 'The GET method has not been defined for collections');
     }
 

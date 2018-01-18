@@ -54,8 +54,20 @@ abstract class AbstractMapper implements MapperInterface
      * @param  array $params
      * @return ZendPaginator
      */
-    public function fetchAll(array $params)
+    public function fetchAll(array $params, $order = null, $asc = false)
     {
+        $qb = $this->getEntityRepository()->createQueryBuilder('t');
+        $sort = ($asc === false) ? 'DESC' : 'ASC';
+         if (is_null($order)) {
+             $qb->orderBy('t.createdAt', $sort);
+         } else {
+             $qb->orderBy('t.' . $order, $sort);
+         }
+ 
+         $query = $qb->getQuery();
+        //  $query = (array) $query;
+         return $query;
+        
     }
 
     /**
