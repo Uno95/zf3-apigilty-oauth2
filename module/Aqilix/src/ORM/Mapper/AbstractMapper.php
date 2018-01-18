@@ -54,31 +54,34 @@ abstract class AbstractMapper implements MapperInterface
      * @param  array $params
      * @return ZendPaginator
      */
-    // public function fetchAll(array $params, $order = null, $asc = false)
-    // {
+    public function fetchAll(array $params, $order = null, $asc = false)
+    {
 
-    //     $qb = $this->getEntityRepository()->createQueryBuilder('t');
-    //     $sort = ($asc === false) ? 'DESC' : 'ASC';
-
-    //     // filter by status
-    //     if (isset($params['status'])) {
-    //         $qb->where('t.status = :status')
-    //            ->setParameter('status', 1);
-    //     }
-
-    //     $qb->orderBy('t.createdAt', $sort);
-    //     if (is_null($order)) {
-    //         $qb->orderBy('t.createdAt', $sort);
-    //     } else {
-    //         $qb->orderBy('t.createdAt', $sort);
-    //     }
- 
-    //     $query = $qb->getQuery();
-    //     // echo $query->getSql();
-    //     // exit;
-    //     return $query;
+        // print_r($params['status']);
+        // exit;
+        $qb = $this->getEntityRepository()->createQueryBuilder('t');
+        $sort = ($asc === false) ? 'DESC' : 'ASC';
         
-    // }
+
+        // filter by status
+        if (isset($params['status'])) {
+            $qb->where('t.status = :status')
+               ->setParameter('status', $params['status']);
+        }
+
+        $qb->orderBy('t.createdAt', $sort);
+        if (is_null($order)) {
+            $qb->orderBy('t.createdAt', $sort);
+        } else {
+            $qb->orderBy('t.createdAt', $sort);
+        }
+ 
+        $query = $qb->getQuery();
+        //echo $query->getSql();
+        //exit;
+        return $query;
+        
+    }
 
     /**
      * Get Paginator Adapter for list
