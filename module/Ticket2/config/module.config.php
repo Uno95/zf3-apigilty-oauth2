@@ -3,6 +3,7 @@ return [
     'service_manager' => [
         'factories' => [
             'ticket' => \Ticket2\V1\Service\TicketFactory::class,
+            'ticket.listener' => \Ticket2\V1\Service\Listener\TicketEventListenerFactory::class,
             \Ticket2\V1\Rest\ShowTickets\ShowTicketsResource::class => \Ticket2\V1\Rest\ShowTickets\ShowTicketsResourceFactory::class,
         ],
         'abstract_factories' => [
@@ -120,14 +121,40 @@ return [
         'Ticket2\\V1\\Rest\\ShowTickets\\Validator' => [
             0 => [
                 'required' => true,
-                'validators' => [],
-                'filters' => [],
+                'validators' => [
+                    0 => [
+                        'name' => \Zend\Validator\Uuid::class,
+                        'options' => [],
+                    ],
+                ],
+                'filters' => [
+                    0 => [
+                        'name' => \Zend\Filter\StringTrim::class,
+                        'options' => [],
+                    ],
+                ],
                 'name' => 'user_profile_uuid',
             ],
             1 => [
                 'required' => true,
-                'validators' => [],
-                'filters' => [],
+                'validators' => [
+                    0 => [
+                        'name' => \Zend\I18n\Validator\Alnum::class,
+                        'options' => [
+                            'allowwhitespace' => true,
+                        ],
+                    ],
+                ],
+                'filters' => [
+                    0 => [
+                        'name' => \Zend\Filter\StringTrim::class,
+                        'options' => [],
+                    ],
+                    1 => [
+                        'name' => \Zend\Filter\StripTags::class,
+                        'options' => [],
+                    ],
+                ],
                 'name' => 'name',
             ],
             2 => [
@@ -139,7 +166,16 @@ return [
             3 => [
                 'required' => false,
                 'validators' => [],
-                'filters' => [],
+                'filters' => [
+                    0 => [
+                        'name' => \Zend\Filter\StringTrim::class,
+                        'options' => [],
+                    ],
+                    1 => [
+                        'name' => \Zend\Filter\StripTags::class,
+                        'options' => [],
+                    ],
+                ],
                 'name' => 'description',
             ],
             4 => [

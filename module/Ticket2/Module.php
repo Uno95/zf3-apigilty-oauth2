@@ -2,9 +2,21 @@
 namespace Ticket2;
 
 use ZF\Apigility\Provider\ApigilityProviderInterface;
+use Zend\Mvc\MvcEvent;
 
 class Module implements ApigilityProviderInterface
 {
+
+    public function onBootstrap(MvcEvent $mvcEvent)
+    {
+        $sm = $mvcEvent->getApplication()->getServiceManager();
+        
+        // event listener
+        $ticketService = $sm->get('ticket');
+        // \Zend\Debug\Debug::dump(get_class_methods($ticketService));exit;
+        $ticketEventListener = $sm->get('ticket.listener');
+        $ticketEventListener->attach($ticketService->getEventManager());
+    }
 
     public function getConfig()
     {

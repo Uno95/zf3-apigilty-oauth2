@@ -8,9 +8,11 @@ use Zend\InputFilter\InputFilter as ZendInputFilter;
 use Psr\Log\LoggerAwareTrait;
 use Ticket2\Mapper\Ticket as TicketMapper;
 use User\Mapper\UserProfile as UserProfileMapper;
+use Ticket2\V1\TicketEvent;
 
 class Ticket
 {
+    use EventManagerAwareTrait;
     use LoggerAwareTrait;
 
     protected $ticketMapper;
@@ -40,14 +42,14 @@ class Ticket
         $this->userProfileMapper = $userProfileMapper;
     }
 
-    public function getTicketHydrator()
-    {
-        return $this->ticketHydrator;
-    }
-
     public function getUserProfileMapper()
     {
         return $this->userProfileMapper;
+    }
+
+    public function getTicketHydrator()
+    {
+        return $this->ticketHydrator;
     }
 
     public function setTicketHydrator(DoctrineObject $ticketHydrator)
@@ -55,30 +57,59 @@ class Ticket
         $this->ticketHydrator = $ticketHydrator;
     }
 
-    public function save(array $data)
+    public function getTicketEvent()
     {
-        try {
-            $userProfileUuid    = $data['user_profile_uuid'];
-            $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
-            if ($userProfileObj == '') {
-                return new ApiProblem(500, 'Cannot find uuid refrence');
-            }
+        if ($this->ticketEvent == null) {
+            $this->ticketEvent = new TicketEvent();
+        }
 
-            $ticket = $this->getTicketHydrator()->hydrate($data, new \Ticket2\Entity\Ticket);
-            $ticket->setUserProfile($userProfileObj);
-            $result = $this->getTicketMapper()->save($ticket);
-            $UUID   = $result->getUuid();
+        return $this->ticketEvent;
+    }
 
-            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data created successfully! \nUUID: ".$UUID, ["function" => __FUNCTION__]);
+    public function setTicketEvent(TicketEvent $ticketEvent)
+    {
+        $this->ticketEvent = $ticketEvent;
+    }
 
-            // \Zend\Debug\Debug::dump(get_class_methods($result));exit;
-        } catch (\Exception $e) {
-            $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
+    public function save(array $data, ZendInputFilter $inputFilter)
+    {
+
+        $ticketEvent = new TicketEvent();
+        // $ticketEvent->setUpdateData($inputFilter->getValues());
+        // \Zend\Debug\Debug::dump($inputFilter->getValues());exit;
+        $ticketEvent->setInputFilter($inputFilter);
+        $ticketEvent->setName(TicketEvent::EVENT_CREATE_TICKET);
+        $create = $this->getEventManager()->triggerEvent($ticketEvent);
+        if ($create->stopped()) {
+            $ticketEvent->setName(TicketEvent::EVENT_CREATE_TICKET_ERROR);
+            $ticketEvent->setException($create->last());
+            $this->getEventManager()->triggerEvent($ticketEvent);
+            throw $ticketEvent->getException();
+        } else {
+            $ticketEvent->setName(TicketEvent::EVENT_CREATE_TICKET_SUCCESS);
+            $this->getEventManager()->triggerEvent($ticketEvent);
+            return $ticketEvent->getTicketEntity();
         }
     }
 
     public function update($id, $data)
     {
+
+        $ticketEvent = new TicketEvent();
+        $ticketEvent->setInputFilter($inputFilter);
+        $ticketEvent->setName(TicketEvent::EVENT_UPDATE_TICKET);
+        $create = $this->getEventManager()->triggerEvent($ticketEvent);
+        if ($create->stopped()) {
+            $ticketEvent->setName(TicketEvent::EVENT_UPDATE_TICKET_ERROR);
+            $ticketEvent->setException($create->last());
+            $this->getEventManager()->triggerEvent($ticketEvent);
+            throw $ticketEvent->getException();
+        } else {
+            $ticketEvent->setName(TicketEvent::EVENT_UPDATE_TICKET_SUCCES);
+            $this->getEventManager()->triggerEvent($ticketEvent);
+            return $ticketEvent->getTicketEntity();
+        }
+        
         try {
             $userProfileUuid    = $data['user_profile_uuid'];
             $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);

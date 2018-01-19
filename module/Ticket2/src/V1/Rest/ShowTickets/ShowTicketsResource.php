@@ -15,7 +15,6 @@ class ShowTicketsResource extends AbstractResourceListener
     {
         $this->setTicketMapper($ticketMapper);
         $this->setTicketService($ticketService);
-        // $this->mapper = $mapper;
     }
 
     /**
@@ -27,7 +26,9 @@ class ShowTicketsResource extends AbstractResourceListener
     public function create($data)
     {
         $data = (array) $data;
-        return $this->getTicketService()->save($data);
+        $inputFilter = $this->getInputFilter();
+        $logData = $inputFilter->getValues();
+        return $this->getTicketService()->save($data, $inputFilter);
         // return new ApiProblem(405, 'sThe POST method has not been defined');
     }
 
