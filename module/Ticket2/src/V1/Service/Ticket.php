@@ -75,8 +75,6 @@ class Ticket
     {
 
         $ticketEvent = new TicketEvent();
-        // $ticketEvent->setUpdateData($inputFilter->getValues());
-        // \Zend\Debug\Debug::dump($inputFilter->getValues());exit;
         $ticketEvent->setInputFilter($inputFilter);
         $ticketEvent->setName(TicketEvent::EVENT_CREATE_TICKET);
         $create = $this->getEventManager()->triggerEvent($ticketEvent);
@@ -92,50 +90,43 @@ class Ticket
         }
     }
 
-    public function update($id, $data)
+    public function update($ticketObj, $inputFilter)
     {
 
         $ticketEvent = new TicketEvent();
+        $ticketEvent->setTicketEntity($ticketObj);
+        $ticketEvent->setUpdateData($inputFilter->getValues());
         $ticketEvent->setInputFilter($inputFilter);
         $ticketEvent->setName(TicketEvent::EVENT_UPDATE_TICKET);
-        $create = $this->getEventManager()->triggerEvent($ticketEvent);
-        if ($create->stopped()) {
+        $update = $this->getEventManager()->triggerEvent($ticketEvent);
+        if ($update->stopped()) {
             $ticketEvent->setName(TicketEvent::EVENT_UPDATE_TICKET_ERROR);
-            $ticketEvent->setException($create->last());
+            $ticketEvent->setException($update->last());
             $this->getEventManager()->triggerEvent($ticketEvent);
             throw $ticketEvent->getException();
         } else {
-            $ticketEvent->setName(TicketEvent::EVENT_UPDATE_TICKET_SUCCES);
+            $ticketEvent->setName(TicketEvent::EVENT_UPDATE_TICKET_SUCCESS);
             $this->getEventManager()->triggerEvent($ticketEvent);
             return $ticketEvent->getTicketEntity();
-        }
-        
-        try {
-            $userProfileUuid    = $data['user_profile_uuid'];
-            $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
-            if ($userProfileObj == '') {
-                return new ApiProblem(500, 'Cannot find uuid refrence');
-            }
-
-            $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
-            $ticket     = $this->getTicketHydrator()->hydrate($data, $ticketObj);
-            $ticket->setUserProfile($userProfileObj);
-            $result     = $this->getTicketMapper()->save($ticket);
-            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data updated successfully! \nUUID: ".$UUID, ["function" => __FUNCTION__]);
-        } catch (\Exception $e) {
-            $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
         }
     }
 
     public function delete($id)
     {
-        try {
-            $ticket = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
-            $this->getTicketMapper()->delete($ticket);
-            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data deleted successfully!", ["function" => __FUNCTION__]);
-            return true;
-        } catch (\Exception $e) {
-            $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
+
+        $ticketEvent = new TicketEvent();
+        $ticketEvent->setDeletedUuid($id);
+        $ticketEvent->setName(TicketEvent::EVENT_DELETE_TICKET);
+        $create = $this->getEventManager()->triggerEvent($ticketEvent);
+        if ($create->stopped()) {
+            $ticketEvent->setName(TicketEvent::EVENT_DELETE_TICKET_ERROR);
+            $ticketEvent->setException($create->last());
+            $this->getEventManager()->triggerEvent($ticketEvent);
+            throw $ticketEvent->getException();
+        } else {
+            $ticketEvent->setName(TicketEvent::EVENT_DELETE_TICKET_SUCCESS);
+            $this->getEventManager()->triggerEvent($ticketEvent);
+            return $ticketEvent->getTicketEntity();
         }
     }
 }

@@ -27,7 +27,6 @@ class ShowTicketsResource extends AbstractResourceListener
     {
         $data = (array) $data;
         $inputFilter = $this->getInputFilter();
-        $logData = $inputFilter->getValues();
         return $this->getTicketService()->save($data, $inputFilter);
         // return new ApiProblem(405, 'sThe POST method has not been defined');
     }
@@ -40,8 +39,8 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function delete($id)
     {
+        
         return $this->getTicketService()->delete($id);
-        // return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
     }
 
     /**
@@ -128,7 +127,9 @@ class ShowTicketsResource extends AbstractResourceListener
     public function update($id, $data)
     {
         $data = (array) $data;
-        return $this->getTicketService()->update($id, $data);
+        $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $id]);
+        $inputFilter = $this->getInputFilter();
+        return $this->getTicketService()->update($ticketObj, $inputFilter);
         // return new ApiProblem(405, 'The PUT method has not been defined for individual resources');
     }
 

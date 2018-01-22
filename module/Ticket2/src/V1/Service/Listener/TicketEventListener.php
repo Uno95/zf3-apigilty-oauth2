@@ -41,16 +41,18 @@ class TicketEventListener implements ListenerAggregateInterface{
             [$this, 'createTicket'],
             499
         );
-        // $this->listeners[] = $events->attach(
-        //     TicketEvent::EVENT_UPDATE_TICKET,
-        //     [$this, 'updateTicket'],
-        //     499
-        // );
-        // $this->listeners[] = $events->attach(
-        //     TicketEvent::EVENT_DELETE_TICKET,
-        //     [$this, 'deleteTicket'],
-        //     499
-        // );
+
+        $this->listeners[] = $events->attach(
+            TicketEvent::EVENT_UPDATE_TICKET,
+            [$this, 'updateTicket'],
+            499
+        );
+
+        $this->listeners[] = $events->attach(
+            TicketEvent::EVENT_DELETE_TICKET,
+            [$this, 'deleteTicket'],
+            499
+        );
     }
 
     public function createTicket(TicketEvent $event)
@@ -83,23 +85,48 @@ class TicketEventListener implements ListenerAggregateInterface{
         }
     }
 
-    // public function updateTicket(TicketEvent $event)
-    // {
-    //     try{
+    public function updateTicket(TicketEvent $event)
+    {
+        try {
 
-    //     }catch(\Exception $e){
+            $ticketEntity = $event->getTicketEntity();
+            $updateData  = $event->getUpdateData();
+            $updateData = (array) $updateData;
+            // add file input filter here
+            if (! $event->getInputFilter() instanceof InputFilterInterface) {
+                throw new InvalidArgumentException('Input Filter not set');
+            }
+
+            $data = $event->getInputFilter()->getValues();
             
-    //     }
-    // }
+            $userProfileUuid    = $data['user_profile_uuid'];
+            $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
+            if ($userProfileObj == '') {
+                return new ApiProblem(500, 'Cannot find uuid refrence');
+            }
 
-    // public function deleteTicket(TicketEvent $event)
-    // {
-    //     try{
+            $ticket     = $this->getTicketHydrator()->hydrate($updateData, $ticketEntity);
+            $ticket->setUserProfile($userProfileObj);
+            $result     = $this->getTicketMapper()->save($ticket);
+            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data updated successfully! \nUUID: ".$UUID, ["function" => __FUNCTION__]);
+        } catch (\Exception $e) {
+            $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
+        }
+    }
 
-    //     }catch(\Exception $e){
-            
-    //     }
-    // }
+    public function deleteTicket(TicketEvent $event)
+    {
+        try{
+            $deletedUuid  = $event->getDeletedUuid();
+            $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $deletedUuid]);
+            // \Zend\Debug\Debug::dump($ticketObj);exit;
+            $this->getTicketMapper()->delete($ticketObj);
+            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data deleted successfully!", ["function" => __FUNCTION__]);
+            return true;
+        }catch(\Exception $e){
+            $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
+        }
+    }
 
     public function getTicketMapper()
     {

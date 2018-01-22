@@ -34,6 +34,10 @@ class TicketEvent extends Event{
      */
     protected $inputFilter;
 
+    protected $updateData;
+
+    protected $deletedUuid;
+
     /**
      * @var \Exception
      */
@@ -53,6 +57,26 @@ class TicketEvent extends Event{
     public function setTicketEntity(TicketEntity $ticketEntity)
     {
         $this->ticketEntity = $ticketEntity;
+    }
+
+    public function getUpdateData()
+    {
+        return $this->updateData;
+    }
+
+    public function setUpdateData($updateData)
+    {
+        $this->updateData = $updateData;
+    }
+
+    public function getDeletedUuid()
+    {
+        return $this->deletedUuid;
+    }
+
+    public function setDeletedUuid($deletedUuid)
+    {
+        $this->deletedUuid = $deletedUuid;
     }
 
     /**
