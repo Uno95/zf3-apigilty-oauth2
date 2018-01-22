@@ -7,7 +7,8 @@ use Ticket2\Entity\Ticket as TicketEntity;
 use Zend\InputFilter\InputFilterInterface;
 use \Exception;
 
-class TicketEvent extends Event{
+class TicketEvent extends Event
+{
     /**#@+
      * Tracking events triggered by eventmanager
      */
@@ -110,5 +111,4 @@ class TicketEvent extends Event{
     {
         $this->exception = $exception;
     }
-
 }

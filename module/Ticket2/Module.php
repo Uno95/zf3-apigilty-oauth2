@@ -10,7 +10,7 @@ class Module implements ApigilityProviderInterface
     public function onBootstrap(MvcEvent $mvcEvent)
     {
         $sm = $mvcEvent->getApplication()->getServiceManager();
-        
+
         // event listener
         $ticketService = $sm->get('ticket');
         // \Zend\Debug\Debug::dump(get_class_methods($ticketService));exit;

@@ -39,7 +39,7 @@ class ShowTicketsResource extends AbstractResourceListener
      */
     public function delete($id)
     {
-        
+
         return $this->getTicketService()->delete($id);
     }
 

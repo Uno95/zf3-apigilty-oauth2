@@ -14,7 +14,8 @@ use Psr\Log\LoggerAwareTrait;
 use Ticket2\V1\TicketEvent;
 use ZF\ApiProblem\ApiProblem;
 
-class TicketEventListener implements ListenerAggregateInterface{
+class TicketEventListener implements ListenerAggregateInterface
+{
 
     use ListenerAggregateTrait;
 
@@ -88,7 +89,6 @@ class TicketEventListener implements ListenerAggregateInterface{
     public function updateTicket(TicketEvent $event)
     {
         try {
-
             $ticketEntity = $event->getTicketEntity();
             $updateData  = $event->getUpdateData();
             $updateData = (array) $updateData;
@@ -98,7 +98,7 @@ class TicketEventListener implements ListenerAggregateInterface{
             }
 
             $data = $event->getInputFilter()->getValues();
-            
+
             $userProfileUuid    = $data['user_profile_uuid'];
             $userProfileObj     = $this->getUserProfileMapper()->getEntityRepository()->findOneBy(['uuid' => $userProfileUuid]);
             if ($userProfileObj == '') {
@@ -116,14 +116,14 @@ class TicketEventListener implements ListenerAggregateInterface{
 
     public function deleteTicket(TicketEvent $event)
     {
-        try{
+        try {
             $deletedUuid  = $event->getDeletedUuid();
             $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $deletedUuid]);
             // \Zend\Debug\Debug::dump($ticketObj);exit;
             $this->getTicketMapper()->delete($ticketObj);
             $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data deleted successfully!", ["function" => __FUNCTION__]);
             return true;
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
         }
     }
@@ -157,5 +157,4 @@ class TicketEventListener implements ListenerAggregateInterface{
     {
         $this->ticketHydrator = $ticketHydrator;
     }
-
 }
