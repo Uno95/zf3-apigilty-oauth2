@@ -126,7 +126,7 @@ class Ticket
         } else {
             $ticketEvent->setName(TicketEvent::EVENT_DELETE_TICKET_SUCCESS);
             $this->getEventManager()->triggerEvent($ticketEvent);
-            return $ticketEvent->getTicketEntity();
+            return true;
         }
     }
 }

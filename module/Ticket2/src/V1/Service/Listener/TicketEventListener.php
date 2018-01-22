@@ -121,7 +121,7 @@ class TicketEventListener implements ListenerAggregateInterface
             $ticketObj  = $this->getTicketMapper()->getEntityRepository()->findOneBy(['uuid' => $deletedUuid]);
             // \Zend\Debug\Debug::dump($ticketObj);exit;
             $this->getTicketMapper()->delete($ticketObj);
-            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : New data deleted successfully!", ["function" => __FUNCTION__]);
+            $this->logger->log(\Psr\Log\LogLevel::INFO, "{function} : Data deleted successfully!", ["function" => __FUNCTION__]);
             return true;
         } catch (\Exception $e) {
             $this->logger->log(\Psr\Log\LogLevel::ERROR, "{function} : Something Error! \nError_message: ".$e->getMessage(), ["function" => __FUNCTION__]);
